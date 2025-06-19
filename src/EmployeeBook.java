@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 
 public class EmployeeBook {
     private static final Employee[] employees = new Employee[10];
@@ -24,17 +25,26 @@ public class EmployeeBook {
         }
     }
 
-    public double[] calculateSalaryExpensesAndAverageSalary() {
+    public double calculateSalaryExpenses() {
+        double amountOfSalaryExpenses = 0;
+        for (Employee sum : employees) {
+            amountOfSalaryExpenses = amountOfSalaryExpenses + sum.getEmployeeSalary();
+        }
+
+        return amountOfSalaryExpenses;
+    }
+
+    public double calculateAverageSalary() {
         double amountOfSalaryExpenses = 0;
         for (Employee sum : employees) {
             amountOfSalaryExpenses = amountOfSalaryExpenses + sum.getEmployeeSalary();
         }
         double averageSum = amountOfSalaryExpenses / employees.length;
 
-        return new double[]{amountOfSalaryExpenses, averageSum};
+        return averageSum;
     }
 
-    public Employee calculateminEmployeeSalary() {
+    public Employee calculateMinEmployeeSalary() {
         Employee minSalary = employees[0];
         for (Employee min : employees) {
             if (min.getEmployeeSalary() < minSalary.getEmployeeSalary()) {
@@ -44,14 +54,14 @@ public class EmployeeBook {
         return minSalary;
     }
 
-    public double[] calculatemaxEmployeeSalary() {
-        double maxSalary = -1;
+    public double calculateMaxEmployeeSalary() {
+        double maxSalary = employees[0].getEmployeeSalary();
         for (final Employee max : employees) {
             if (max.getEmployeeSalary() > maxSalary) {
                 maxSalary = max.getEmployeeSalary();
             }
         }
-        return new double[]{maxSalary};
+        return maxSalary;
     }
 
     public void printAllNamesEmployees() {
@@ -61,22 +71,23 @@ public class EmployeeBook {
         }
     }
 
-    public double[] calculatesalaryIndexation(double percentIndexation) {
+    public List<Employee> calculateSalaryIndexation(double percentIndexation) {
         if (percentIndexation < -100) {
             throw new IllegalArgumentException("Процент не может быть меньше -100!");
         }
-        double[] newSalaries = new double[employees.length];
-        int d = 0;
+        List<Employee> resultIndexation = new ArrayList<>();
         for (Employee indexation : employees) {
-            double currentSalary = indexation.getEmployeeSalary();
-            double newSalary = currentSalary * (1 + percentIndexation / 100);
-            indexation.setEmployeeSalary(newSalary);
-            newSalaries[d++] = newSalary;
+            if (indexation != null) {
+                double currentSalary = indexation.getEmployeeSalary();
+                double newSalary = currentSalary * (1 + percentIndexation / 100);
+                indexation.setEmployeeSalary(newSalary);
+                resultIndexation.add(indexation);
+            }
         }
-        return newSalaries;
+        return  resultIndexation;
     }
 
-    public Employee calculateminEmployeeSalaryForDept(int dept) {
+    public Employee calculateMinEmployeeSalaryForDept(int dept) {
         if (dept < 1 || dept > 5) {
             throw new IllegalArgumentException("Введен некорректный номер отдела, введите номер отдела от 1 до 5!");
         }
@@ -89,7 +100,7 @@ public class EmployeeBook {
         return minSalaryForDept;
     }
 
-    public Employee calculatemaxEmployeeSalaryForDept(int dept) {
+    public Employee calculateMaxEmployeeSalaryForDept(int dept) {
         if (dept < 1 || dept > 5) {
             throw new IllegalArgumentException("Введен некорректный номер отдела, введите номер отдела от 1 до 5!");
         }
@@ -132,29 +143,22 @@ public class EmployeeBook {
         return amountOfSalaryExpensesForDept / employeeCount;
     }
 
-    public double[] calculatesalaryIndexationForDept(int dept, double percentIndexation) {
+    public List<Employee> calculateSalaryIndexationForDept(int dept, double percentIndexation) {
         if (dept < 1 || dept > 5) {
             throw new IllegalArgumentException("Введен некорректный номер отдела, введите номер отдела от 1 до 5!");
         }
         if (percentIndexation < -100) {
             throw new IllegalArgumentException("Процент не может быть меньше -100!");
         }
-        int employeeCounter = 0;
-        for (Employee indexation : employees) {
-            if (dept == indexation.getDept()) {
-                employeeCounter++;
-            }
-        }
-        double[] newSalariesForDept = new double[employeeCounter];
-        int index = 0;
+        List<Employee> resultIndexationForDept = new ArrayList<>();
         for (Employee newSalaries : employees) {
             if (newSalaries.getDept() == dept) {
                 double newSalary = newSalaries.getEmployeeSalary() * (1 + percentIndexation / 100);
                 newSalaries.setEmployeeSalary(newSalary);
-                newSalariesForDept[index++] = newSalary;
+                resultIndexationForDept.add(newSalaries);
             }
         }
-        return newSalariesForDept;
+        return resultIndexationForDept;
     }
 
     public void printAllInformationEmployeesForDept(int dept) {
@@ -169,35 +173,22 @@ public class EmployeeBook {
         }
     }
 
-    public Employee[] findSalaryMinTheNumber(double number) {
-        int countEmployee = 0;
-        for (Employee salaryMinTheNumber : employees) {
-            if (salaryMinTheNumber != null && number > salaryMinTheNumber.getEmployeeSalary()) {
-                countEmployee++;
+    public List<Employee> findEmployeesWithSalaryBelow(double number) {
+        List<Employee> employeesWithSalary = new ArrayList<>();
+        for (Employee emp : employees) {
+            if (emp != null && emp.getEmployeeSalary() < number) {
+                employeesWithSalary.add(emp);
             }
         }
-        Employee[] resultEmployeesMinSalaryNumber = new Employee[countEmployee];
-        int inex = 0;
-        for (Employee salaryMin : employees) {
-            if (salaryMin != null && number > salaryMin.getEmployeeSalary()) {
-                resultEmployeesMinSalaryNumber[inex++] = salaryMin;
-            }
-        }
-        return resultEmployeesMinSalaryNumber;
+        return employeesWithSalary;
     }
 
-    public Employee[] salaryMaxTheNumberOrEqualToTheNumber(double number) {
-        int countEmployee = 0;
-        for (Employee salaryMaxTheNumber : employees) {
-            if (salaryMaxTheNumber != null && number <= salaryMaxTheNumber.getEmployeeSalary()) {
-                countEmployee++;
-            }
-        }
-        Employee[] resultEmployeesMaxSalaryNumber = new Employee[countEmployee];
-        int inex = 0;
+    public List<Employee> salaryMaxTheNumberOrEqualToTheNumber(double number) {
+        List<Employee> resultEmployeesMaxSalaryNumber = new ArrayList<>();
+
         for (Employee salaryMax : employees) {
             if (salaryMax != null && number <= salaryMax.getEmployeeSalary()) {
-                resultEmployeesMaxSalaryNumber[inex++] = salaryMax;
+                resultEmployeesMaxSalaryNumber.add(salaryMax);
             }
         }
         return resultEmployeesMaxSalaryNumber;

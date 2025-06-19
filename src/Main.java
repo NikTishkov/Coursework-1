@@ -6,50 +6,44 @@ public class Main {
         EmployeeBook employeeBook = new EmployeeBook();
         employeeBook.initializeEmployees();
         employeeBook.printAllInformationEmployees();
-        double[] amountOfSalaryExpensesAndAverageSalary = employeeBook.calculateSalaryExpensesAndAverageSalary();
-        System.out.println("Сумма затрат на зарплату составляет: " + amountOfSalaryExpensesAndAverageSalary[0] + " рублей.");
-        System.out.println("Среднее значение зарплат составляет: " + amountOfSalaryExpensesAndAverageSalary[1] + " рублей.");
-        Employee minSalary = employeeBook.calculateminEmployeeSalary();
+        double amountOfSalaryExpenses = employeeBook.calculateSalaryExpenses();
+        System.out.println("Сумма затрат на зарплату составляет: " + amountOfSalaryExpenses + " рублей.");
+        double amountAverageSalary = employeeBook.calculateAverageSalary();
+        System.out.println("Среднее значение зарплат составляет: " + amountAverageSalary + " рублей.");
+        Employee minSalary = employeeBook.calculateMinEmployeeSalary();
         System.out.println("Сотрудник с минимальной зарплатой - " + minSalary.getFullName() + ". Размер зарплаты составляет: " + minSalary.getEmployeeSalary() + " рублей.");
-        double[] maxSalary = employeeBook.calculatemaxEmployeeSalary();
-        System.out.println("Максимальная зарплата сотрудника составляет " + maxSalary[0] + " рублей.");
+        double maxSalary = employeeBook.calculateMaxEmployeeSalary();
+        System.out.println("Максимальная зарплата сотрудника составляет " + maxSalary + " рублей.");
         employeeBook.printAllNamesEmployees();
-        double[] newSalaries = employeeBook.calculatesalaryIndexation(25);
-        for (double newSalary : newSalaries) {
-            System.out.println("Зарплата после индексации: " + newSalary);
+        List <Employee> resultIndexation = employeeBook.calculateSalaryIndexation(10.0);
+        System.out.println("Зарплаты после индексации:");
+        for (Employee indexation : resultIndexation) {
+            System.out.println(indexation.getFullName()+ " " + indexation.getEmployeeSalary() + " рублей.");
         }
-        Employee minEmployeeSalaryForDept = employeeBook.calculateminEmployeeSalaryForDept(2);
+        Employee minEmployeeSalaryForDept = employeeBook.calculateMinEmployeeSalaryForDept(2);
         System.out.println("Минимальная зарплата сотрудника отдела " + minEmployeeSalaryForDept.getDept() + " составляет: " + minEmployeeSalaryForDept.getEmployeeSalary() + " рублей.");
-        Employee maxEmployeeSalaryForDept = employeeBook.calculatemaxEmployeeSalaryForDept(1);
+        Employee maxEmployeeSalaryForDept = employeeBook.calculateMaxEmployeeSalaryForDept(1);
         System.out.println("Максимальная зарплата сотрудника отдела " + maxEmployeeSalaryForDept.getDept() + " составляет: " + maxEmployeeSalaryForDept.getEmployeeSalary() + " рублей.");
         double amountOfSalaryExpensesForDept = employeeBook.calculateSalaryExpensesForDept(5);
         System.out.println("Сумма затрат в отделе на зарплату составляет: " + amountOfSalaryExpensesForDept + " рублей.");
         double averageSalaryForDept = employeeBook.calculateAverageSalaryForDept(4);
         System.out.println("Средняя зарплата в отделе на зарплату составляет: " + averageSalaryForDept + " рублей.");
-        double[] salaryIndexationForDept = employeeBook.calculatesalaryIndexationForDept(3, 50);
-        System.out.println("Зарплата сотрудников в отделе после индексации: ");
-        for (double newSalaryForDept : salaryIndexationForDept) {
-            System.out.println(newSalaryForDept);
+        List <Employee> resultIndexationForDept = employeeBook.calculateSalaryIndexationForDept(3, 10.0);
+        System.out.println("Проиндексированные зарплаты сотрудников отдела: ");
+        for (Employee indFDept : resultIndexationForDept) {
+            System.out.println(indFDept.getFullName()+ " " + indFDept.getEmployeeSalary() + " рублей.");
         }
         employeeBook.printAllInformationEmployeesForDept(4);
-        Employee[] minTheNumber = employeeBook.findSalaryMinTheNumber(50000);
-        if (minTheNumber.length > 0) {
-            System.out.println("Сотрудники с зарплатой меньше введенного числа:");
-            for (Employee min : minTheNumber) {
-                System.out.println(min.getFullName() + ". ID:" + min.getId() + " Зароботная плата сотрудника- " + min.getEmployeeSalary() + ".");
-            }
-        } else {
-            System.out.println("Сотрудников с зарплатой меньше введенного числа нет.");
+        List<Employee> lowPaidEmployees = employeeBook.findEmployeesWithSalaryBelow(50000);
+        System.out.println("Сотрудники с зарплатой ниже 50000:");
+        for (Employee min : lowPaidEmployees) {
+            System.out.println(min.getFullName() + ". ID:" + min.getId() + " Зароботная плата сотрудника- " + min.getEmployeeSalary() + " рублей.");
         }
-        Employee[] maxTheNumberOrEqualToTheNumber = employeeBook.salaryMaxTheNumberOrEqualToTheNumber(90000);
-        if (maxTheNumberOrEqualToTheNumber.length > 0) {
+        List<Employee> maxTheNumberOrEqualToTheNumber = employeeBook.salaryMaxTheNumberOrEqualToTheNumber(90000);
             System.out.println("Сотрудники с зарплатой больше или равной введенному числу:");
             for (Employee max : maxTheNumberOrEqualToTheNumber) {
-                System.out.println(max.getFullName() + ". ID:" + max.getId() + " Зароботная плата сотрудника- " + max.getEmployeeSalary() + ".");
+                System.out.println(max.getFullName() + ". ID:" + max.getId() + " Зароботная плата сотрудника- " + max.getEmployeeSalary() + " рублей.");
             }
-        } else {
-            System.out.println("Сотрудников с зарплатой больше или равной введенному числу нет.");
-        }
         boolean removeEmployeeById = employeeBook.removeEmployeeById(21);
         if (removeEmployeeById) {
             System.out.println("Сотрудник успешно удален!");
